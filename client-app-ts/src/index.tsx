@@ -1,14 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './app/layout/styles.css';
-import 'semantic-ui-css/semantic.min.css';
-import App from './app/layout/App';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./app/layout/styles.css";
+import "semantic-ui-css/semantic.min.css";
+import App from "./app/layout/App";
+import { BrowserRouter } from "react-router-dom";
+import ScrollToTop from "./app/layout/ScrollToTop";
 
 ReactDOM.render(
-  <>
-    <App />
-  </>,
-  document.getElementById('root')
+  <BrowserRouter>
+    <ScrollToTop>
+      <App />
+    </ScrollToTop>
+  </BrowserRouter>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
