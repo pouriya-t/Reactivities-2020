@@ -1,28 +1,25 @@
-import React, { Fragment, useContext } from "react";
-import { Item, Label } from "semantic-ui-react";
+// import { Fragment, default as React } from "react";
+import { Fragment, useContext } from "react";
+import { Item } from "semantic-ui-react";
 import ActivityStore from "../../../app/stores/activityStore";
 import { observer } from "mobx-react-lite";
 import ActivityListItem from "./ActivityListItem";
 
-const ActivityList: React.FC = () => {
+const ActivityList = () => {
   const activityStore = useContext(ActivityStore);
   const { activitiesByDate } = activityStore;
 
+  // return <div>Hello</div>;
 
   return (
     <Fragment>
-      {activitiesByDate.map(([group, activities]) => (
-        <Fragment key={group}>
-          <Label size="large" color="blue">
-            {group}
-          </Label>
+        <Fragment>
           <Item.Group divided>
-            {activities.map((activity) => (
+            {activitiesByDate.map((activity) => (
               <ActivityListItem key={activity.id} activity={activity} />
             ))}
           </Item.Group>
         </Fragment>
-      ))}
     </Fragment>
   );
 };
