@@ -1,19 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Router } from "react-router-dom";
+import { createBrowserHistory } from "history";
 import './index.css';
 import "semantic-ui-css/semantic.min.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from '../src/app/layout/App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from "react-router-dom";
 import ScrollToTop from "./app/layout/ScrollToTop";
 
+export const history = createBrowserHistory();
+
 ReactDOM.render(
-  <BrowserRouter>
+  <Router history={history}>
     <ScrollToTop>
       <App />
     </ScrollToTop>
-  </BrowserRouter>,
+  </Router>,
   document.getElementById('root')
 );
 

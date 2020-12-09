@@ -16,8 +16,23 @@ class ActivityStore {
   }
 
   get activitiesByDate() {
-    return Array.from(this.activityRegistry.values()).sort(
+    return this.groupActivitiesByDate(
+      Array.from(this.activityRegistry.values())
+    );
+  }
+
+  groupActivitiesByDate(activities) {
+    const sortedActivities = activities.sort(
       (a, b) => Date.parse(a.date) - Date.parse(b.date)
+    );
+    return Object.entries(
+      sortedActivities.reduce((activities, activity) => {
+        const date = activity.date.split("T")[0];
+        activities[date] = activities[date]
+          ? [...activities[date], activity]
+          : [activity];
+        return activities;
+      },  [] )
     );
   }
 
@@ -57,7 +72,7 @@ class ActivityStore {
         this.submitting = false;
       });
     } catch (error) {
-      runInAction("create activity error", () => {
+      runInAction(() => {
         this.submitting = false;
       });
       console.log(error);
@@ -68,13 +83,13 @@ class ActivityStore {
     this.submitting = true;
     try {
       await agent.Activities.update(activity);
-      runInAction("editing activity", () => {
+      runInAction(() => {
         this.activityRegistry.set(activity.id, activity);
         this.activity = activity;
         this.submitting = false;
       });
     } catch (error) {
-      runInAction("edit activity error", () => {
+      runInAction(() => {
         this.submitting = false;
       });
       console.log(error);
@@ -94,7 +109,7 @@ class ActivityStore {
           this.loadingInitial = false;
         });
       } catch (error) {
-        runInAction("get activity error", () => {
+        runInAction(() => {
           this.loadingInitial = false;
         });
         console.log(error);
@@ -113,7 +128,7 @@ class ActivityStore {
         this.target = "";
       });
     } catch (error) {
-      runInAction("delete activity error", () => {
+      runInAction(() => {
         this.submitting = false;
         this.target = "";
       });
