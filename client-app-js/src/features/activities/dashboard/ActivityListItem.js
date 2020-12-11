@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Icon, Item, Segment } from "semantic-ui-react";
+import { format } from "date-fns";
 
 const ActivityListItem = observer(({ activity }) => {
   return (
@@ -12,15 +13,14 @@ const ActivityListItem = observer(({ activity }) => {
             <Item.Image size="tiny" circular src="/assets/user.png" />
             <Item.Content>
               <Item.Header as="a">{activity.title}</Item.Header>
-              <Item.Meta>{activity.date}</Item.Meta>
               <Item.Description>Hosted by Bob</Item.Description>
             </Item.Content>
           </Item>
         </Item.Group>
       </Segment>
       <Segment>
-        <Icon name="clock" /> {activity.date}
-        <Icon name="marker" /> {activity.venue}
+        <Icon name="clock" /> {format(activity.date, "h:mm a")}
+        <Icon name="marker" /> {activity.venue} , {activity.city}
       </Segment>
       <Segment secondary>Attendees will go here</Segment>
       <Segment clearing>

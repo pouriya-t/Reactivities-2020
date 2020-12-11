@@ -2,12 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
-import './index.css';
+import "react-toastify/dist/ReactToastify.min.css";
+import "react-widgets/dist/css/react-widgets.css";
 import "semantic-ui-css/semantic.min.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from '../src/app/layout/App';
 import reportWebVitals from './reportWebVitals';
 import ScrollToTop from "./app/layout/ScrollToTop";
+
+import dateFnsLocalizer from 'react-widgets-date-fns';
+
+dateFnsLocalizer();
 
 export const history = createBrowserHistory();
 
