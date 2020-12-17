@@ -1,13 +1,11 @@
 import { configure, makeAutoObservable, runInAction } from "mobx";
-import { createContext } from "react";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
 import { history } from "../..";
 
-
 configure({ enforceActions: "always" });
 
-class ActivityStore {
+export default class ActivityStore {
   activityRegistry = new Map();
   activity = null;
   loadingInitial = false;
@@ -35,7 +33,7 @@ class ActivityStore {
           ? [...activities[date], activity]
           : [activity];
         return activities;
-      },  [] )
+      }, [])
     );
   }
 
@@ -148,5 +146,3 @@ class ActivityStore {
     }
   };
 }
-
-export default createContext(new ActivityStore());

@@ -1,10 +1,21 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 import { history } from "../..";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
-axios.interceptors.response.use(undefined, (error) => {
+axios.interceptors.request.use(
+  (config) => {
+    const token = window.localStorage.getItem("jwt");
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
+axios.interceptors.response.use(undefined, (error) => {
   if (error.message === "Network Error" && !error.response) {
     toast.error("Network error - make sure API is running!");
   }
@@ -22,6 +33,7 @@ axios.interceptors.response.use(undefined, (error) => {
   if (status === 500) {
     toast.error("Server error - check the terminal for more info!");
   }
+  throw error.response;
 });
 
 const responseBody = (response) => response.data;
@@ -44,6 +56,12 @@ const Activities = {
   delete: (id) => requests.del(`/activities/${id}`),
 };
 
-const activities = { Activities };
+const User = {
+  current: () => requests.get("/user"),
+  login: (user) => requests.post(`/user/login`, user),
+  register: (user) => requests.post(`/user/register`, user),
+};
+
+const activities = { Activities, User };
 
 export default activities;

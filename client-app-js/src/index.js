@@ -1,28 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import "react-toastify/dist/ReactToastify.min.css";
 import "react-widgets/dist/css/react-widgets.css";
 import "semantic-ui-css/semantic.min.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import App from '../src/app/layout/App';
-import reportWebVitals from './reportWebVitals';
+import "bootstrap/dist/css/bootstrap.min.css";
+import App from "../src/app/layout/App";
+import reportWebVitals from "./reportWebVitals";
 import ScrollToTop from "./app/layout/ScrollToTop";
 
-import dateFnsLocalizer from 'react-widgets-date-fns';
+import dateFnsLocalizer from "react-widgets-date-fns";
 
 dateFnsLocalizer();
 
 export const history = createBrowserHistory();
 
 ReactDOM.render(
-  <Router history={history}>
-    <ScrollToTop>
-      <App />
-    </ScrollToTop>
-  </Router>,
-  document.getElementById('root')
+    <Router history={history}>
+      <ScrollToTop>
+        <App />
+      </ScrollToTop>
+    </Router>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
