@@ -14,7 +14,7 @@ const ModalContainer = observer(() => {
       open={open}
       onClose={closeModal}
       size="mini"
-      style={{ marginLeft: "38%" }}
+      style={{ left: "auto", right: "auto" }}
     >
       <Modal.Content>{body}</Modal.Content>
     </Modal>

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
-import ActivityStore from "../../../app/stores/activityStore";
 import { observer } from "mobx-react-lite";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import ActivityDetailedHeader from "./ActivityDetailedHeader";
@@ -29,7 +28,7 @@ const ActivityDetails = ({ match }) => {
         <ActivityDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <ActivityDetailedSidebar />
+        <ActivityDetailedSidebar attendees={activity.attendees} />
       </Grid.Column>
     </Grid>
   );
