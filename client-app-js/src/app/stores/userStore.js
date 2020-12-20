@@ -1,5 +1,5 @@
 import { history } from "./../../index";
-import { runInAction } from "mobx";
+import { makeAutoObservable, observable, runInAction } from "mobx";
 import agent from "../api/agent";
 
 export default class UserStore {
@@ -8,8 +8,10 @@ export default class UserStore {
 
   constructor(rootStore) {
     this.rootStore = rootStore;
+    makeAutoObservable(this, {
+      user: observable,
+    });
   }
-
 
   get isLoggedIn() {
     return !!this.user;
@@ -37,11 +39,11 @@ export default class UserStore {
       });
       this.rootStore.commonStore.setToken(user.token);
       this.rootStore.modalStore.closeModal();
-      history.push('/activities')
+      history.push("/activities");
     } catch (error) {
       throw error;
     }
-  }
+  };
 
   getUser = async () => {
     try {

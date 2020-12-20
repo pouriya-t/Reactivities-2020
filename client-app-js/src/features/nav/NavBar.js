@@ -5,7 +5,7 @@ import { Button, Container, Menu, Dropdown, Image } from "semantic-ui-react";
 import Navbar from "react-bootstrap/Navbar";
 import { RootStoreContext } from "../../app/stores/rootStore";
 
-const NavBar = observer(() => {
+const NavBar = () => {
   const rootStore = useContext(RootStoreContext);
   const { user, logout } = rootStore.userStore;
   return (
@@ -48,7 +48,7 @@ const NavBar = observer(() => {
                 <Dropdown.Menu>
                   <Dropdown.Item
                     as={Link}
-                    to={`/profile/username`}
+                    to={`/profile/${user.username}`}
                     text="My profile"
                     icon="user"
                   />
@@ -61,6 +61,6 @@ const NavBar = observer(() => {
       </Menu>
     </div>
   );
-});
+};
 
-export default NavBar;
+export default observer(NavBar);

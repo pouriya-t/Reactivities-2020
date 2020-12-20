@@ -14,8 +14,13 @@ const ActivityListItem = observer(({ activity }) => {
           <Item>
             <Item.Image size="tiny" circular src="/assets/user.png" />
             <Item.Content>
-              <Item.Header as="a">{activity.title}</Item.Header>
-              <Item.Description>Hosted by {host.displayName}</Item.Description>
+            <Item.Header as={Link} to={`/activities/${activity.id}`}>
+                {activity.title}
+              </Item.Header>
+              <Item.Description>
+                Hosted by
+                <Link to={`/profile/${host.username}`}> {host.displayName}</Link>
+              </Item.Description>
               {activity.isHost && (
                 <Item.Description>
                   <Label
