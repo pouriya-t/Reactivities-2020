@@ -76,8 +76,9 @@ const User = {
 const Profiles = {
   get: (username) => requests.get(`/profiles/${username}`),
   uploadPhoto: (photo) => requests.postForm(`/photos`, photo),
-  setMainPhoto: (id) => requests.post(`/photos/${id}/setMain`,{}),
+  setMainPhoto: (id) => requests.post(`/photos/${id}/setMain`, {}),
   deletePhoto: (id) => requests.del(`/photos/${id}`),
+  updateProfile: (profile) => requests.put(`/profiles`, profile),
 };
 
 const activities = { Activities, User, Profiles };

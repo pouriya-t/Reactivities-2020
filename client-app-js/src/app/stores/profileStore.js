@@ -20,6 +20,7 @@ export default class ProfileStore {
       setMainPhoto: action,
       loading: observable,
       deletePhoto: action,
+      updateProfile: action,
     });
   }
 
@@ -108,6 +109,20 @@ export default class ProfileStore {
       runInAction(() => {
         this.loading = false;
       });
+    }
+  };
+
+  updateProfile = async (profile) => {
+    try {
+      await agent.Profiles.updateProfile(profile);
+      runInAction(() => {
+        if (profile.displayName !== this.rootStore.userStore.user.displayName) {
+          this.rootStore.userStore.user.displayName = profile.displayName;
+        }
+        this.profile = { ...this.profile, ...profile };
+      });
+    } catch (error) {
+      toast.error("Problem updating profile");
     }
   };
 }
