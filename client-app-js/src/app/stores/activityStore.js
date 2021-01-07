@@ -1,8 +1,9 @@
-import { configure, makeAutoObservable, runInAction } from "mobx";
+import { configure, makeAutoObservable, observable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { createAttendee, setActivityProps } from "../common/util/util";
+import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 
 configure({ enforceActions: "always" });
 
@@ -14,11 +15,59 @@ export default class ActivityStore {
   target = "";
   rootStore;
   loading = false;
+  hubConnection = null;
 
   constructor(rootStore) {
-    makeAutoObservable(this);
+    makeAutoObservable(this, { hubConnection: observable.ref });
     this.rootStore = rootStore;
   }
+
+  createHubConnection = (activityId) => {
+    this.hubConnection = new HubConnectionBuilder()
+      .withUrl("http://localhost:5000/chat", {
+        accessTokenFactory: () => this.rootStore.commonStore.token,
+      })
+      .configureLogging(LogLevel.Information)
+      .build();
+
+    this.hubConnection
+      .start()
+      .then(() => console.log(this.hubConnection.state))
+      .then(() => {
+        console.log("Attempting to join group");
+        this.hubConnection.invoke("AddToGroup", activityId);
+      })
+      .catch((error) => console.log("Error establishing connection : ", error));
+
+    this.hubConnection.on("ReceiveComment", (comment) => {
+      runInAction(() => {
+        this.activity.comments.push(comment);
+      });
+    });
+
+    this.hubConnection.on("Send", (message) => {
+      toast.info(message);
+    });
+  };
+
+  stopHubConnection = () => {
+    this.hubConnection
+      .invoke("RemoveFromGroup", this.activity.id)
+      .then(() => {
+        this.hubConnection.stop();
+      })
+      .then(() => console.log("Connection stopped"))
+      .catch((err) => console.log(err));
+  };
+
+  addComment = async (values) => {
+    values.activityId = this.activity.id;
+    try {
+      await this.hubConnection.invoke("SendComment", values);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   get activitiesByDate() {
     return this.groupActivitiesByDate(
@@ -77,6 +126,7 @@ export default class ActivityStore {
       let attendees = [];
       attendees.push(attendee);
       activity.attendees = attendees;
+      activity.comments = [];
       activity.isHost = true;
       runInAction(() => {
         this.activityRegistry.set(activity.id, activity);

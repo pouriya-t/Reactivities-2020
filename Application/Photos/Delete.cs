@@ -51,6 +51,7 @@ namespace Application.Photos
                     throw new Exception("Problem deleting the photo");
 
                 user.Photos.Remove(photo);
+                _context.Photos.Remove(photo);
 
                 var success = await _context.SaveChangesAsync() > 0;
 
