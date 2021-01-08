@@ -22,7 +22,7 @@ const ActivityDetailedSidebar: React.FC<IProps> = ({ attendees }) => {
         {attendees.length} {attendees.length === 1 ? "Person" : "People"}
       </Segment>
       <Segment attached>
-       <List relaxed divided>
+        <List relaxed divided>
           {attendees.map((attendee) => (
             <Item key={attendee.username} style={{ position: "relative" }}>
               {attendee.isHost && (
@@ -41,11 +41,13 @@ const ActivityDetailedSidebar: React.FC<IProps> = ({ attendees }) => {
                     {attendee.displayName}
                   </Link>
                 </Item.Header>
-                <Item.Extra style={{ color: "orange" }}>Following</Item.Extra>
+                {attendee.following && (
+                  <Item.Extra style={{ color: "orange" }}>Following</Item.Extra>
+                )}
               </Item.Content>
             </Item>
           ))}
-        </List> 
+        </List>
       </Segment>
     </Fragment>
   );

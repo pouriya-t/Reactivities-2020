@@ -79,6 +79,10 @@ const Profiles = {
   setMainPhoto: (id) => requests.post(`/photos/${id}/setMain`, {}),
   deletePhoto: (id) => requests.del(`/photos/${id}`),
   updateProfile: (profile) => requests.put(`/profiles`, profile),
+  follow: (username) => requests.post(`/profiles/${username}/follow`, {}),
+  unfollow: (username) => requests.del(`/profiles/${username}/follow`),
+  listFollowings: (username, predicate) =>
+    requests.get(`/profiles/${username}/follow?predicate=${predicate}`),
 };
 
 const activities = { Activities, User, Profiles };
