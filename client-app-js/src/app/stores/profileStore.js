@@ -26,6 +26,9 @@ export default class ProfileStore {
       loadFollowings: action,
       follow: action,
       unfollow: action,
+      userActivities: observable,
+      loadingActivities: observable,
+      loadUserActivities: action,
     });
 
     reaction(
@@ -47,6 +50,8 @@ export default class ProfileStore {
   loading = false;
   followings = [];
   activeTab = 0;
+  userActivities = [];
+  loadingActivities = false;
 
   get isCurrentUser() {
     if (this.rootStore.userStore.user && this.profile) {
@@ -55,6 +60,25 @@ export default class ProfileStore {
       return false;
     }
   }
+
+  loadUserActivities = async (username, predicate) => {
+    this.loadingActivities = true;
+    try {
+      const activities = await agent.Profiles.listActivities(
+        username,
+        predicate
+      );
+      runInAction(() => {
+        this.userActivities = activities;
+        this.loadingActivities = false;
+      });
+    } catch (error) {
+      toast.error("Problem loading activities");
+      runInAction(() => {
+        this.loadingActivities = false;
+      });
+    }
+  };
 
   setActiveTab = (activeIndex) => {
     this.activeTab = activeIndex;

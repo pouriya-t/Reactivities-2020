@@ -58,7 +58,11 @@ const requests = {
 };
 
 const Activities = {
-  list: () => requests.get("/activities"),
+  list: (params) =>
+    axios
+      .get("/activities", { params: params })
+      .then(sleep(1000))
+      .then(responseBody),
   details: (id) => requests.get(`/activities/${id}`),
   create: (activity) => requests.post("/activities", activity),
   update: (activity) => requests.put(`/activities/${activity.id}`, activity),
@@ -83,6 +87,8 @@ const Profiles = {
   unfollow: (username) => requests.del(`/profiles/${username}/follow`),
   listFollowings: (username, predicate) =>
     requests.get(`/profiles/${username}/follow?predicate=${predicate}`),
+  listActivities: (username, predicate) =>
+    requests.get(`/profiles/${username}/activities?predicate=${predicate}`),
 };
 
 const activities = { Activities, User, Profiles };

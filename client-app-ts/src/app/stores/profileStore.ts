@@ -1,4 +1,4 @@
-import { IPhoto } from "./../models/profile";
+import { IPhoto, IUserActivity } from "./../models/profile";
 import { action, computed, observable, reaction, runInAction } from "mobx";
 import { IProfile } from "../models/profile";
 import { RootStore } from "./rootStore";
@@ -13,15 +13,15 @@ export default class ProfileStore {
 
     reaction(
       () => this.activeTab,
-      activeTab => {
-        if(activeTab === 3 || activeTab === 4) {
-          const predicate = activeTab === 3 ? 'followers' : 'following';
-          this.loadFollowings(predicate)
+      (activeTab) => {
+        if (activeTab === 3 || activeTab === 4) {
+          const predicate = activeTab === 3 ? "followers" : "following";
+          this.loadFollowings(predicate);
         } else {
           this.followings = [];
         }
       }
-    )
+    );
   }
 
   @observable profile: IProfile | null = null;
@@ -30,6 +30,8 @@ export default class ProfileStore {
   @observable loading = false;
   @observable followings: IProfile[] = [];
   @observable activeTab: number = 0;
+  @observable userActivities: IUserActivity[] = [];
+  @observable loadingActivities = false;
 
   @computed get isCurrentUser() {
     if (this.rootStore.userStore.user && this.profile) {
@@ -39,9 +41,25 @@ export default class ProfileStore {
     }
   }
 
-  @action setActiveTab = (activeIndex:number) => {
+  @action loadUserActivities = async (username: string, predicate?: string) => {
+    this.loadingActivities = true;
+    try {
+      const activities = await agent.Profiles.listActivities(username,predicate!)
+      runInAction(() => {
+        this.userActivities = activities;
+        this.loadingActivities = false;
+      })
+    } catch (error) {
+      toast.error("Problem loading activities");
+      runInAction(() => {
+        this.loadingActivities = false;
+      })
+    }
+  };
+
+  @action setActiveTab = (activeIndex: number) => {
     this.activeTab = activeIndex;
-  }
+  };
 
   @action loadProfile = async (username: string) => {
     try {
